@@ -1,13 +1,20 @@
 const User = require('../models/UserSchema');
 const Trip = require('../models/tripSchema');
+require('dotenv').config();
 const geofenceInKm=1;
+const twilioAcc=process.env.TWILIO_NO;
+const twilioToken=process.env.TWILIO_TOKEN;
+const twilioNumber=process.env.TWILIO_PHONE;
 const createTrip = async (req, res) => {
   const { username, travelCompanions, pickupLat, pickupLong, dropLat, dropLong } = req.body;
   const driverName = "Manoj Kumar", driverPhoneNumber="912321456", cabNumber="RJ14 1111";
   const curLat=pickupLat,curLong=pickupLong;
   const status="ongoing";
+  const trip = await Trip.findOne({ username, status: 'ongoing' });
+  if(trip){
+    return res.status(400).json({ message: 'You already have an ongoing trip', success: false, data: null });
+  }
   try {
-    
     if(travelCompanions.length)
     for (const Cusername of travelCompanions) {
         const companion = await User.findOne({ username: Cusername, isTravelerC: true });
@@ -38,9 +45,28 @@ const createTrip = async (req, res) => {
         
         companion.notifications.push('Trip started');
         await companion.save();
+        const message = `Your friend ${username} has started a trip. View details: http://localhost:5000/api/trips/viewTrip/${newTrip._id}`;
+        
+        const accountSid = twilioAcc;
+        const authToken = twilioToken;
+        const twilioPhoneNumber = twilioNumber;
+        
+        
+        // console.log(twilioPhoneNumber,twilioAcc,twilioToken)
+        const client = require('twilio')(accountSid, authToken);
+        
+      
+      await client.messages.create({
+        body: message,
+        from: twilioPhoneNumber,
+        to: companion.phoneNo 
+      });
+
       }
     await newTrip.save();
-    const tripId = newTrip._id; // Get the trip ID
+
+    
+    const tripId = newTrip._id; 
     const tripLink = `http://localhost:5000/api/trips/viewTrip/${tripId}`; 
     res.status(201).json({ message: 'Trip created successfully', success: true, data: tripLink });
   } catch (error) {
@@ -235,4 +261,3 @@ const getNotification = async (req, res) => {
 };
 
 module.exports = { createTrip, viewTrip, viewAudit ,updateCurrentLocation,addFeedbackToTrip,getNotification};
-

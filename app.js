@@ -13,7 +13,8 @@ mongoose.connect(mongoLink)
 .then(() => {
     console.log("Connected to the Database");
 }).catch((err) => {
-    console.log(err);
+    // console.log("Not Connected to the Database",mongoLink);
+    console.log(err);   
 });
 
 app.use(bodyParser.json()); 

@@ -33,7 +33,7 @@ const addUser = async (req, res) => {
     }
 
     
-    const phoneRegex = /^[0-9]{10}$/;
+    const phoneRegex = /^\+?[0-9]{0,3}[0-9]{10}$/;
     if (!phoneRegex.test(phoneNo)) {
       return res.status(400).json({ message: 'Invalid phone number format', success: false, data: null });
     }
@@ -79,7 +79,7 @@ const addUser = async (req, res) => {
 
     const verificationLink = `http://localhost:5000/api/auth/verify/${hash}`;
 
-    // Send email with OTP and verification link
+   
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -121,7 +121,7 @@ const addAdmin = async (req, res) => {
       return res.status(400).json({ message: 'PhoneNo already exists', success: false, data: null });
     }
     
-    const phoneRegex = /^[0-9]{10}$/;
+    const phoneRegex = /^\+?[0-9]{0,3}[0-9]{10}$/;
     if (!phoneRegex.test(phoneNo)) {
       return res.status(400).json({ message: 'Invalid phone number format', success: false, data: null });
     }
