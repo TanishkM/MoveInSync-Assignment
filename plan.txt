@@ -1,20 +1,14 @@
 
 
-notification on app as well as mail and whatsapp if possible
-use traveler-companion scripts in js
-notification
-get my notifications
-
-
-
-
-
-
 
 
 --------------------------
 done: ---------------------------------------------
+use traveler-companion scripts in js
 test forgot and update password 
+notification on app as well as mail and whatsapp if possible
+notification
+get my notifications
 better toggling roles logic like taraveler cannot  toggle traveler
 better error handling of the adduser api like unique phone no.
 authentication -
