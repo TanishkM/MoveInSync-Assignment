@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const { isLoggedIn, isTraveler, isTravelerC } = require('../middleware/authMiddleware');
+const { addUser, loginUser, addAdmin, forgetPassword, resetPasswordOtp, resetPassword,verifyUser, toggleTraveler, toggleTravelerC } = require('../controllers/authController');
+router.post('/register', addUser);
+router.post('/registerAdmin', addAdmin);
+router.get('/login', loginUser);
+router.get('/verify/:hash', verifyUser);
+router.post('/forgetPassword',forgetPassword);
+router.post('/resetPasswordOtp',resetPasswordOtp);
+router.post('/resetPassword',isLoggedIn,resetPassword);
+router.post('/toggleTraveler',isLoggedIn,toggleTraveler);
+router.post('/toggleTravelerC',isLoggedIn,toggleTravelerC);
+module.exports = router;
